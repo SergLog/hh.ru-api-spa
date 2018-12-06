@@ -1,12 +1,20 @@
 <template>
   <div>
-      {{ Object.keys(employers).length }}
-{{ employers }}
-<!-- <b-btn @click="employers">cvcc</b-btn>  -->
+
+{{ vacancies1.length }}
+{{ vacancies2.length }}
+
+<p></p>
+<b-btn @click="testone">Объеденить json</b-btn>
+<div ref="id"></div>
+
   </div>
 </template>
 
 <script>
+ 'use strict'
+require('babel-polyfill');
+
  import axios from 'axios'
 
   export default {
@@ -14,23 +22,109 @@
   
   data() {
     return {
-      employers: {}      
+      vacancies1: [],    
+      vacancies2: [],
+      vacancies3: [],
+       res: "gggg",
+       vacancy: [],
+       idArray: []
     }
   },
   
   created() {
-    axios.get(`https://api.hh.ru/vacancies/?text=vue&area=1&per_page=100`)
+    axios.get(`https://api.hh.ru/vacancies/?text=vue+&area=1&per_page=100&page=1`)
     .then(response => {
-      this.employers = response.data
+      this.vacancies1 = response.data.items;
     })
     .catch(e => {
       this.errors.push(e)
     })
 
-    
+     axios.get(`https://api.hh.ru/vacancies/?text=vue&area=1&per_page=100&page=1`)
+    .then(response => {
+      this.vacancies2 = response.data.items;
+    })
+    .catch(e => {
+      this.errors.push(e)
+    })    
+  },
+
+  methods: {
+     joinArrays: function() {
+        // this.vacancies3 = this.vacancies1.concat(this.vacancies2) 
+        // this.$refs.id.innerText = JSON.stringify(this.vacancies3[0]["id"]);
+        
+         var arr = [];
+
+        this.vacancies1.forEach(function(element) {
+          arr.push(element["id"]);
+        });
+
+        this.idArray = arr;
+              // console.log(arr);
+            // this.$refs.id.innerText = JSON.stringify(idAarray);
+
+    //     var VacancyAarray = [];
+    //         idArray.forEach(function(element) {
+              
+    //               // axios.get(`https://api.hh.ru/vacancies/${element}`)
+                  
+    //               axios.get(`https://api.hh.ru/vacancies/${element}`, {headers: {'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Content-Type"}})
+    // .then(response => {
+    //   // this.vacancy = response.data;
+    //   //  VacancyArray.push(this.vacancy);
+    // })
+    // .catch(e => {
+    //   this.errors.push(e)
+    //   this.$refs.id.innerText = e.innerText;
+    // }) 
+         
+    //     });
+    //      console.log(VacancyAarray.length);
+     },
+     testone: function() {
+       //var arr = [];
+       //var element = '28764941';
+            this.joinArrays();
+           
+
+
+          var arr = this.idArray;
+            arr.forEach(function(el, i) {
+           
+           setTimeout(function () {
+         
+    axios.get(`https://api.hh.ru/vacancies/${el}`)
+     .then(response => {
+      // arr = response.data;
+      //console.log(response.data);
+       
+      // console.log(response.data);
+      console.log(el);
+      
+    })
+      .catch(e => {
+      this.errors.push(e)
+    }) 
+           }, i * 200);
+		 
+     
+     
+            
+
+  // try {
+  //   const response = await axios.get(`https://api.hh.ru/vacancies/${element}`);
+  //   console.log(response);
+  // } catch (error) {
+  //   console.error(error);
+  // }            
+            
+     })
+
+     }
   }
 }
-  
+
 </script>
 
 
