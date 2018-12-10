@@ -5,17 +5,18 @@
 {{ vacancies2.length }}
 
 <p></p>
-<b-btn @click="testone">Объеденить json</b-btn>
+<b-btn @click="testone">get data</b-btn>
+<b-btn @click="testarr">test array</b-btn>
 <div ref="id"></div>
 
   </div>
 </template>
 
 <script>
- 'use strict'
+'use strict'
 require('babel-polyfill');
 
- import axios from 'axios'
+import axios from 'axios'
 
   export default {
   name: 'TestAPI',
@@ -26,13 +27,14 @@ require('babel-polyfill');
       vacancies2: [],
       vacancies3: [],
        res: "gggg",
-       vacancy: [],
+       vacancy: {},
+       result: [],
        idArray: []
     }
   },
   
   created() {
-    axios.get(`https://api.hh.ru/vacancies/?text=vue+&area=1&per_page=100&page=1`)
+    axios.get(`https://api.hh.ru/vacancies/?text=vue+&area=1&per_page=10&page=1`)
     .then(response => {
       this.vacancies1 = response.data.items;
     })
@@ -50,17 +52,17 @@ require('babel-polyfill');
   },
 
   methods: {
-     joinArrays: function() {
+    joinArrays: function() {
         // this.vacancies3 = this.vacancies1.concat(this.vacancies2) 
         // this.$refs.id.innerText = JSON.stringify(this.vacancies3[0]["id"]);
         
-         var arr = [];
+      var arr = [];
 
-        this.vacancies1.forEach(function(element) {
-          arr.push(element["id"]);
-        });
+      this.vacancies1.forEach(function(element) {
+        arr.push(element["id"]);
+      });
 
-        this.idArray = arr;
+      this.idArray = arr;
               // console.log(arr);
             // this.$refs.id.innerText = JSON.stringify(idAarray);
 
@@ -85,43 +87,50 @@ require('babel-polyfill');
      testone: function() {
        //var arr = [];
        //var element = '28764941';
-            this.joinArrays();
-           
+            this.joinArrays();          
 
+          var res = [];
 
           var arr = this.idArray;
+
+
             arr.forEach(function(el, i) {
            
+                
+
            setTimeout(function () {
+
          
     axios.get(`https://api.hh.ru/vacancies/${el}`)
      .then(response => {
-      // arr = response.data;
+      //this.vacancy = response.data;
       //console.log(response.data);
+      //console.log(this.result);
        
+      //console.log(response.data);
+      this.result.push(response.data); 
+      //console.log(res.length);
       // console.log(response.data);
-      console.log(el);
+      //console.log(el);
       
     })
       .catch(e => {
       this.errors.push(e)
     }) 
-           }, i * 200);
-		 
-     
-     
-            
+           }.bind(this), i * 200);
+		            
+           
+     }.bind(this))
 
-  // try {
-  //   const response = await axios.get(`https://api.hh.ru/vacancies/${element}`);
-  //   console.log(response);
-  // } catch (error) {
-  //   console.error(error);
-  // }            
-            
-     })
 
+          // this.$refs.id.innerText = this.res.length;
+          
+
+     },
+     testarr: function() {
+       console.log(this.result);
      }
+
   }
 }
 
