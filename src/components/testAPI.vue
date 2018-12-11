@@ -107,8 +107,9 @@ import axios from 'axios'
       //console.log(response.data);
       //console.log(this.result);
        
-      //console.log(response.data);
-      this.result.push(response.data); 
+      console.log(response.data);
+      res.push(response.data); 
+      console.log(res);
       //console.log(res.length);
       // console.log(response.data);
       //console.log(el);
@@ -128,7 +129,7 @@ import axios from 'axios'
 
      },
      testarr: function() {
-       console.log(this.result);
+       console.log(this.result[0]);
      }
 
   }
