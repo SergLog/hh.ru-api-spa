@@ -17,7 +17,7 @@ export class MapCanvas {
     const russia = [90, 66];
     const russiaWebMercator = fromLonLat(russia);
 
-    const map = new Map({
+    var map = new Map({
       target: "map",
       controls: defaultControls().extend([mousePositionControl]),
       layers: [
@@ -30,7 +30,31 @@ export class MapCanvas {
         zoom: 3
       })
     });
+    //map.render();
+    //map.renderSync();
+    new SingletonMap(map);
   }
+}
 
-  getMap() {}
+export class MapSetting {
+  constructor() {}
+
+  setLocation(xy, zoom) {
+    let map = new SingletonMap().data;
+    let locationWebMercator = fromLonLat(xy);
+    map.getView().setZoom(zoom);
+    map.getView().setCenter(locationWebMercator);
+    map.render();
+  }
+}
+
+let _singleton = null;
+
+export class SingletonMap {
+  constructor(data) {
+    if (!_singleton) {
+      this.data = data;
+      _singleton = this;
+    } else return _singleton;
+  }
 }
