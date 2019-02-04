@@ -47,8 +47,7 @@ export default {
         new MapCanvas().initMap();
       }, 1000);
     });
-  },
-  created() {}
+  }
 };
 </script>
 

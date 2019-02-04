@@ -30,8 +30,6 @@ export class MapCanvas {
         zoom: 3
       })
     });
-    //map.render();
-    //map.renderSync();
     new SingletonMap(map);
   }
 }
@@ -45,6 +43,7 @@ export class MapSetting {
     map.getView().setZoom(zoom);
     map.getView().setCenter(locationWebMercator);
     map.render();
+    map.updateSize();
   }
 }
 
