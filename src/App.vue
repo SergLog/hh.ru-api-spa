@@ -12,6 +12,9 @@
         <b-tab title="Карта">
           <the-map></the-map>
         </b-tab>
+        <b-tab title="Мониторинг вакансий">
+          <job-monitor></job-monitor>
+        </b-tab>
       </b-tabs>
     </b-card>
   </div>
@@ -21,10 +24,11 @@
 import TestAPI from "./components/TestAPI.vue";
 import { DataAPI, vacancies } from "./service.js";
 import TheMap from "./components/TheMap.vue";
+import JobMonitor from "./components/JobMonitor.vue";
 
 export default {
   name: "app",
-  components: { TestAPI, TheMap },
+  components: { TestAPI, TheMap, JobMonitor },
   data() {
     return {
       msg: "Welcome to Your Vue.js App",
