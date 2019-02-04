@@ -26,7 +26,7 @@ import { MapCanvas, SingletonMap, MapSetting } from "../modules/map.js";
 export default {
   data: () => ({
     ZoomMap: [
-      { location: "Россия", xy: [90, 66], zoom: 3 },
+      { location: "-Россия-", xy: [90, 66], zoom: 3 },
       { location: "Москва", xy: [37.62, 55.75], zoom: 10 },
       { location: "Питер", xy: [30.31, 59.96], zoom: 10 },
       { location: "Сургут", xy: [73.39, 61.25], zoom: 12 },
