@@ -3,6 +3,9 @@
     <b-container fluid>
       <b-row>
         <b-col cols="2">
+          <div class="mb-2">
+            <b-button @click="clickHeatMap">Тепловая карта</b-button>
+          </div>
           <b-list-group>
             <b-list-group-item
               button
@@ -39,6 +42,9 @@ export default {
   methods: {
     setZoom(xy, zoom) {
       new MapSetting().setLocation(xy, zoom);
+    },
+    clickHeatMap() {
+      new MapSetting().heatMap();
     }
   },
   mounted() {
