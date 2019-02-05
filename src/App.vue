@@ -4,13 +4,13 @@
       <b-tabs card>
         <b-tab title="Серёга что-то мутит" active>
           <!-- <test-a-p-i></test-a-p-i> -->
-          <b-btn @click="get">Получить массив</b-btn>
-          <b-btn @click="getDataTest">Проверка массива из 100 вакансий</b-btn>
+          <!-- <b-btn @click="get">Получить массив</b-btn> -->
+          <b-btn @click="getDataTest">Проверка</b-btn>
 
-          <b-btn @click="getidarr">Получить массив id-ков</b-btn>
-          <div>{{ arr[0] }}</div>
+          <!-- <b-btn @click="getidarr">Получить массив id-ков</b-btn> -->
+          <!-- <div>{{ arr[0] }}</div> -->
 
-          <div>{{ vacans }}</div>
+          <div>{{ result.length }}</div>
 
         </b-tab>
         <b-tab title="Карта">
@@ -41,7 +41,9 @@ export default {
     return {
       msg: "Welcome to Your Vue.js App",
       arr: [],
-      vacans: []
+      vacans: [],
+      vacansid: [],
+      result: [],
     };
   },
   methods: {
@@ -72,67 +74,50 @@ export default {
        let pagesCount;
        let i = 0;
 
-
     axios
       .get(`https://api.hh.ru/vacancies/?text=vue+&area=1&per_page=100`)
       .then(response => {
         pagesCount = response.data.pages;
-        //console.log(pagesCount);
-        //callback(this.vacancies);
-        runLoop.call(this, pagesCount);
-        
+        runLoop.call(this, pagesCount);        
       })
       .catch(e => {
-        // this.errors.push(e)
         console.log(e);
       });        
  
 function runLoop(cnt) {  
-
-let arrtemp = [];
-
-while (i < cnt) {
-  
-  //console.log(i);
-   // setTimeout(function () {
-
+while (i < cnt) {  
+    
+    
     axios
       .get(`https://api.hh.ru/vacancies/?text=vue+&area=1&per_page=100&page=${i}`)
       .then(response => {
-        //this.vacans.push.apply(this.vacans, response.data.items);
-        //console.log(this.vacans);
-        //console.log(response.data.items)
-        //this.vacans.push(response.data.items); 
-        //this.vacans.concat(response.data.items);
-        //this.vacans = response.data.items;
-        //this.vacans.push(response.data.items);
-        //console.log(response.data.items);
-        arrtemp.push(response.data.items);
-        //console.log(arrtemp);
-        
-        if (cnt === 4)  {
-            for(var n in arrtemp) {
-                  this.vacans = this.vacans.concat(arrtemp[n]);
-            }
-            console.log(this.vacans);
-        }
-        // this.vacans.push(arrtemp[0])
-        // this.vacans.concat(arrtemp[1]);
 
-        // console.log(this.vacans);
-        //console.log(typeof(response.data.items));
-        //console.log(this.vacans);
-        //console.log(arrtemp);
-      
+        response.data.items.forEach((element, i) => {
+        this.vacans.push(response.data.items[i]);
+        this.vacansid.push(element["id"]);
+        
+     setTimeout(function () {
+            console.log(i);
+
+     axios.get(`https://api.hh.ru/vacancies/${element["id"]}`)
+     .then(response => {             
+      this.result.push(response.data); 
+    })
+      .catch(e => {
+      //this.errors.push(e)
+      console.log(e);
+    }) 
+    }.bind(this), i * 1000);
+
+
+        //}).bind(this);
+        });
       })
       .catch(e => {
-        // this.errors.push(e)
         console.log(e);
       });
       i++;
-      //  }.bind(this), i*200);	
 }
-  //console.log(this.vacans);
 }
 
   }

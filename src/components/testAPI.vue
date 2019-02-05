@@ -53,36 +53,14 @@ import axios from 'axios'
 
   methods: {
     joinArrays: function() {
-        // this.vacancies3 = this.vacancies1.concat(this.vacancies2) 
-        // this.$refs.id.innerText = JSON.stringify(this.vacancies3[0]["id"]);
         
       var arr = [];
-
       this.vacancies1.forEach(function(element) {
         arr.push(element["id"]);
       });
 
-      this.idArray = arr;
-              // console.log(arr);
-            // this.$refs.id.innerText = JSON.stringify(idAarray);
-
-    //     var VacancyAarray = [];
-    //         idArray.forEach(function(element) {
-              
-    //               // axios.get(`https://api.hh.ru/vacancies/${element}`)
-                  
-    //               axios.get(`https://api.hh.ru/vacancies/${element}`, {headers: {'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Content-Type"}})
-    // .then(response => {
-    //   // this.vacancy = response.data;
-    //   //  VacancyArray.push(this.vacancy);
-    // })
-    // .catch(e => {
-    //   this.errors.push(e)
-    //   this.$refs.id.innerText = e.innerText;
-    // }) 
-         
-    //     });
-    //      console.log(VacancyAarray.length);
+this.idArray = arr;
+   
      },
      testone: function() {
        //var arr = [];
@@ -95,17 +73,11 @@ import axios from 'axios'
            setTimeout(function () {
          
     axios.get(`https://api.hh.ru/vacancies/${el}`)
-     .then(response => {
-      //this.vacancy = response.data;
-      //console.log(response.data);
-      //console.log(this.result);
-       
+     .then(response => {       
       console.log(response.data);
       res.push(response.data); 
       console.log(res);
-      //console.log(res.length);
-      // console.log(response.data);
-      //console.log(el);      
+    
     })
       .catch(e => {
       this.errors.push(e)
