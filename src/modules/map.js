@@ -26,15 +26,24 @@ export class MapCanvas {
     const russiaWebMercator = fromLonLat(russia);
 
     var count = 5000;
-    var features = new Array(count);
+    var features = [];
     var k = 37.5,
       j = 55.7;
+
+    var l = 73.39,
+      t = 61.25;
     for (var i = 0; i < count; ++i) {
       var coordinates = [
         k + (Math.random() / 10) * 2,
         j + (Math.random() / 10) * 2
       ];
-      features[i] = new Feature(new Point(fromLonLat(coordinates)));
+
+      var coordinates1 = [
+        l + (Math.random() / 10) * 2,
+        t + (Math.random() / 10) * 2
+      ];
+      features.push(new Feature(new Point(fromLonLat(coordinates))));
+      features.push(new Feature(new Point(fromLonLat(coordinates1))));
     }
 
     var source = new VectorSource({
