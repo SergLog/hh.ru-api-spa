@@ -87,19 +87,12 @@ import axios from 'axios'
      testone: function() {
        //var arr = [];
        //var element = '28764941';
-            this.joinArrays();          
-
+            this.joinArrays();
           var res = [];
-
           var arr = this.idArray;
 
-
             arr.forEach(function(el, i) {
-           
-                
-
            setTimeout(function () {
-
          
     axios.get(`https://api.hh.ru/vacancies/${el}`)
      .then(response => {
@@ -112,21 +105,16 @@ import axios from 'axios'
       console.log(res);
       //console.log(res.length);
       // console.log(response.data);
-      //console.log(el);
-      
+      //console.log(el);      
     })
       .catch(e => {
       this.errors.push(e)
     }) 
-           }.bind(this), i * 200);
-		            
+           }.bind(this), i * 200);		            
            
      }.bind(this))
 
-
-          // this.$refs.id.innerText = this.res.length;
-          
-
+          // this.$refs.id.innerText = this.res.length;          
      },
      testarr: function() {
        console.log(this.result[0]);
