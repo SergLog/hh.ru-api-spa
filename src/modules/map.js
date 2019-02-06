@@ -1,8 +1,5 @@
 import "ol/ol.css";
-//import { Map, View } from "ol";
 import { defaults as defaultControls } from "ol/control.js";
-//import TileLayer from "ol/layer/Tile";
-//import OSM from "ol/source/OSM";
 import MousePosition from "ol/control/MousePosition.js";
 import { fromLonLat } from "ol/proj";
 
@@ -31,37 +28,65 @@ export class MapCanvas {
     const russia = [90, 66];
     const russiaWebMercator = fromLonLat(russia);
 
-    var count = 5000;
+    var rasterLayer = new TileLayer({
+      source: new OSM()
+    });
+    rasterLayer.typeLayer = "raster";
+
+    var map = new Map({
+      target: "map",
+      controls: defaultControls().extend([mousePositionControl]),
+      layers: [rasterLayer],
+      view: new View({
+        center: russiaWebMercator,
+        zoom: 3
+      })
+    });
+    new SingletonMap(map);
+  }
+}
+
+let sourceObjects = [];
+
+export class MapSetting {
+  constructor() {
+    this.map = new SingletonMap().data;
+  }
+
+  setLocation(xy, zoom) {
+    let locationWebMercator = fromLonLat(xy);
+    this.map.getView().setZoom(zoom);
+    this.map.getView().setCenter(locationWebMercator);
+    this.map.render();
+    this.map.updateSize();
+  }
+
+  setSource(arrayCoordinates) {
+    this.map.getLayers().forEach(layer => {
+      if (!(layer instanceof TileLayer)) {
+        this.map.removeLayer(layer);
+      }
+    });
+
     var features = [];
-    var k = 37.5,
-      j = 55.7;
-
-    var l = 73.39,
-      t = 61.25;
-    for (var i = 0; i < count; ++i) {
-      var coordinates = [
-        k + (Math.random() / 10) * 2,
-        j + (Math.random() / 10) * 2
-      ];
-
-      var coordinates1 = [
-        l + (Math.random() / 10) * 2,
-        t + (Math.random() / 10) * 2
-      ];
-      features.push(new Feature(new Point(fromLonLat(coordinates))));
-      features.push(new Feature(new Point(fromLonLat(coordinates1))));
-    }
+    arrayCoordinates.forEach(p => {
+      //features.push(new Feature(new Point(fromLonLat([p.lat, p.lng]))));
+      features.push(new Feature(new Point(fromLonLat([p.lng, p.lat]))));
+    });
 
     var source = new VectorSource({
       features: features
     });
 
+    sourceObjects = source;
+
     var clusterSource = new Cluster({
-      distance: 100,
+      distance: 10,
       source: source
     });
 
     var styleCache = {};
+
     var clusters = new VectorLayer({
       source: clusterSource,
       style: function(feature) {
@@ -91,67 +116,11 @@ export class MapCanvas {
       }
     });
 
-    var rasterLayer = new TileLayer({
-      source: new OSM()
-    });
-    rasterLayer.typeLayer = "raster";
-
-    var map = new Map({
-      target: "map",
-      controls: defaultControls().extend([mousePositionControl]),
-      layers: [
-        rasterLayer,
-        clusters
-        //vectorPoint,
-        //vectorHeat
-      ],
-      view: new View({
-        center: russiaWebMercator,
-        zoom: 3
-      })
-    });
-    new SingletonMap(map);
-  }
-}
-
-export class MapSetting {
-  constructor() {
-    this.map = new SingletonMap().data;
-  }
-
-  setLocation(xy, zoom) {
-    let locationWebMercator = fromLonLat(xy);
-    this.map.getView().setZoom(zoom);
-    this.map.getView().setCenter(locationWebMercator);
-    this.map.render();
-    this.map.updateSize();
+    this.map.addLayer(clusters);
   }
 
   heatMap() {
-    var count = 5000;
-    var features = [];
-    var k = 37.5,
-      j = 55.7;
-
-    var l = 73.39,
-      t = 61.25;
-    for (var i = 0; i < count; ++i) {
-      var coordinates = [
-        k + (Math.random() / 10) * 2,
-        j + (Math.random() / 10) * 2
-      ];
-
-      var coordinates1 = [
-        l + (Math.random() / 10) * 2,
-        t + (Math.random() / 10) * 2
-      ];
-      features.push(new Feature(new Point(fromLonLat(coordinates))));
-      features.push(new Feature(new Point(fromLonLat(coordinates1))));
-    }
-
-    var source = new VectorSource({
-      features: features
-    });
+    var source = sourceObjects;
 
     var vectorHeat = new HeatmapLayer({
       source: source,
@@ -172,7 +141,7 @@ export class MapSetting {
     });
 
     this.map.getLayers().forEach(layer => {
-      if (layer.typeLayer != "raster") {
+      if (!(layer instanceof TileLayer)) {
         this.map.removeLayer(layer);
       }
     });
