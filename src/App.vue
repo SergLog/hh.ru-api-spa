@@ -3,6 +3,7 @@
     <b-card no-body>
       <b-tabs card>
         <b-tab title="Серёга что-то мутит" active>
+
           <br>
           <b-input id="keyWords" style="width: 300px" placeholder="Введите ключевые слова (vue+html)" size="sm" required>
           </b-input>
@@ -19,9 +20,10 @@
           <b-tab title="Навыки">
           <the-skills v-bind:arr = "result"></the-skills>
           
+
         </b-tab>
         <b-tab title="Карта">
-          <the-map></the-map>
+          <the-map :location="addressArr"></the-map>
         </b-tab>
         <b-tab title="Мониторинг вакансий">
           <job-monitor></job-monitor>
@@ -42,7 +44,6 @@ import axios from "axios";
 
 import JobMonitor from "./components/JobMonitor.vue";
 
-
 export default {
   name: "app",
   components: { TestAPI, TheMap, JobMonitor, TheSkills },
@@ -50,10 +51,12 @@ export default {
     return {
       vacans: [],
       vacansid: [],
+
       result: [],
       counter: 0,
       vacansCnt: 0,
       addressArr: []
+
     };
   },
   methods: {
@@ -69,6 +72,7 @@ alert( positiveArr ); // 1,2,3
       },
       getData() {        
         //todo сделать fetch, fetchall, async await       
+
 
        let pagesCount;
        let i = 0;
@@ -135,6 +139,7 @@ while (i < cnt) {
 }
 }}
       }
+
 
 };
 </script>
