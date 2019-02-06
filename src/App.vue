@@ -18,6 +18,7 @@
           <br>
           <br>
           <div>Количество вакансий - {{ result.length }} из {{ vacansCnt }}</div>
+          <div>Количество объектов на карте - {{ addressArr.length }}</div>
           <br>
           <div>{{ addressArr }}</div>
         </b-tab>
@@ -86,7 +87,7 @@ export default {
         .get(
           `https://api.hh.ru/vacancies/?text=${
             keywords.value
-          }+&area=1&per_page=100`
+          }+&per_page=100`
         )
         .then(response => {
           pagesCount = response.data.pages;
@@ -101,13 +102,13 @@ export default {
         while (i < cnt) {
           this.counter = i;
 
-          let varObj = {};
+          
 
           axios
             .get(
               `https://api.hh.ru/vacancies/?text=${
                 keywords.value
-              }+&area=1&per_page=100&page=${i}`
+              }+&per_page=100&page=${i}`
             )
             .then(response => {
               response.data.items.forEach((element, i) => {
@@ -120,9 +121,10 @@ export default {
                   response.data.items[i].address.hasOwnProperty("lng")
                 ) {
                   //console.log(response.data.items[i].id);
-                  varObj.lat = response.data.items[i].address.lat;
-                  varObj.lng = response.data.items[i].address.lng;
-                  this.addressArr.push(varObj);
+                  var p = new Object();
+                  p.lat = response.data.items[i].address.lat;
+                  p.lng = response.data.items[i].address.lng;
+                  this.addressArr.push(p);
                 }
 
                 setTimeout(
