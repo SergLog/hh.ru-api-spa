@@ -3,15 +3,22 @@
     <b-card no-body>
       <b-tabs card>
         <b-tab title="Серёга что-то мутит" active>
-          <!-- <test-a-p-i></test-a-p-i> -->
-          <!-- <b-btn @click="get">Получить массив</b-btn> -->
-          <b-btn @click="getDataTest">Проверка</b-btn>
-
-          <!-- <b-btn @click="getidarr">Получить массив id-ков</b-btn> -->
-          <!-- <div>{{ arr[0] }}</div> -->
-
-          <div>{{ result.length }}</div>
-
+          <br>
+          <b-input id="keyWords" style="width: 300px" placeholder="Введите ключевые слова (vue+html)" size="sm" required>
+          </b-input>
+          <br>
+          <b-progress :value="counter" :max="vacansCnt" show-progress animated class="w-25 mb-2"></b-progress>
+          <br>
+          <b-btn @click="getData">Загрузить</b-btn>
+          <br>
+          <br>
+          <div>Количество вакансий - {{ result.length }} из {{ vacansCnt }}</div>
+          <br>
+          <div>{{ addressArr }}</div>
+        </b-tab>
+          <b-tab title="Навыки">
+          <the-skills v-bind:arr = "result"></the-skills>
+          
         </b-tab>
         <b-tab title="Карта">
           <the-map></the-map>
@@ -28,6 +35,8 @@
 import TestAPI from "./components/TestAPI.vue";
 import { DataAPI, vacancies } from "./service.js";
 import TheMap from "./components/TheMap.vue";
+import TheSkills from "./components/TheSkills.vue";
+
 
 import axios from "axios";
 
@@ -36,81 +45,87 @@ import JobMonitor from "./components/JobMonitor.vue";
 
 export default {
   name: "app",
-  components: { TestAPI, TheMap, JobMonitor },
+  components: { TestAPI, TheMap, JobMonitor, TheSkills },
   data() {
     return {
-      msg: "Welcome to Your Vue.js App",
-      arr: [],
       vacans: [],
       vacansid: [],
       result: [],
+      counter: 0,
+      vacansCnt: 0,
+      addressArr: []
     };
   },
   methods: {
-    get: function() {
-      //new DataAPI().getData(this.fillarray);
+      getskills() {
+          var arr = [1, -1, 2, -2, 3];
 
-      var ob = new DataAPI();
+var positiveArr = arr.filter(function(number) {
+  return number > 0;
+});
 
-      ob.getData(getData);
-      //console.log(ob.PagesCount);
+alert( positiveArr ); // 1,2,3
 
-      function getData(Data) {
-        console.log(Data);
-      }
+      },
+      getData() {        
+        //todo сделать fetch, fetchall, async await       
 
-      //console.log(ob.PagesCnt);
-      ob.getAllData();
-    },
-    getidarr: function() {
-      new DataAPI().getIDArray();
-    },
-    fillarray: function(arr){ 
-      this.arr = arr;
-      //console.log(arr);
-    },
-      getDataTest() {
-       
        let pagesCount;
        let i = 0;
 
+       this.result = [];
+       this.vacansCnt = 1;
+
+
+       let keywords = document.getElementById("keyWords");
+        if (keywords.value.length === 0) {
+          alert('Введите ключевые слова')
+      }           
+
     axios
-      .get(`https://api.hh.ru/vacancies/?text=vue+&area=1&per_page=100`)
-      .then(response => {
-        pagesCount = response.data.pages;
-        runLoop.call(this, pagesCount);        
-      })
+      .get(`https://api.hh.ru/vacancies/?text=${keywords.value}+&area=1&per_page=100`)
+        .then(response => {
+          pagesCount = response.data.pages;
+          this.vacansCnt = response.data.found;
+          runLoop.call(this, pagesCount);        
+        })
       .catch(e => {
         console.log(e);
       });        
  
 function runLoop(cnt) {  
-while (i < cnt) {  
-    
-    
+while (i < cnt) { 
+  this.counter = i;
+
+  let varObj = {};
+
     axios
-      .get(`https://api.hh.ru/vacancies/?text=vue+&area=1&per_page=100&page=${i}`)
+      .get(`https://api.hh.ru/vacancies/?text=${keywords.value}+&area=1&per_page=100&page=${i}`)
       .then(response => {
 
         response.data.items.forEach((element, i) => {
         this.vacans.push(response.data.items[i]);
         this.vacansid.push(element["id"]);
         
+        if ((response.data.items[i].address) !== null && response.data.items[i].address.hasOwnProperty('lat') && response.data.items[i].address.hasOwnProperty('lng')) {
+          //console.log(response.data.items[i].id);
+          varObj.lat = response.data.items[i].address.lat;
+          varObj.lng = response.data.items[i].address.lng;
+          this.addressArr.push(varObj);
+          }
+        
      setTimeout(function () {
-            console.log(i);
 
      axios.get(`https://api.hh.ru/vacancies/${element["id"]}`)
      .then(response => {             
       this.result.push(response.data); 
+      this.counter = this.result.length;   
     })
       .catch(e => {
       //this.errors.push(e)
       console.log(e);
     }) 
     }.bind(this), i * 1000);
-
-
-        //}).bind(this);
         });
       })
       .catch(e => {
@@ -118,10 +133,9 @@ while (i < cnt) {
       });
       i++;
 }
-}
+}}
+      }
 
-  }
-  }
 };
 </script>
 
