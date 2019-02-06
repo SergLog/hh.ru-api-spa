@@ -16,6 +16,7 @@
           </b-list-group>
         </b-col>
         <b-col cols="10">
+          <div>{{location}}</div>
           <div id="map" class="map"></div>
         </b-col>
       </b-row>
@@ -39,6 +40,9 @@ export default {
       { location: "Казань", xy: [49.12, 55.78], zoom: 12 }
     ]
   }),
+  props: {
+    location: Array
+  },
   methods: {
     setZoom(xy, zoom) {
       new MapSetting().setLocation(xy, zoom);
