@@ -12,7 +12,7 @@
           <div>{{ result.length }}</div>
         </b-tab>
         <b-tab title="Карта">
-          <the-map location="[{lat:73,lng:62},{lat:70,lng:60}]"></the-map>
+          <the-map :locationObject="mapObjects"></the-map>
         </b-tab>
         <b-tab title="Мониторинг вакансий">
           <job-monitor></job-monitor>
@@ -40,7 +40,8 @@ export default {
       arr: [],
       vacans: [],
       vacansid: [],
-      result: []
+      result: [],
+      mapObjects: [{ lat: 37, lng: 61 }, { lat: 37, lng: 55 }]
     };
   },
   methods: {

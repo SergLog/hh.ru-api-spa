@@ -4,6 +4,9 @@
       <b-row>
         <b-col cols="2">
           <div class="mb-2">
+            <b-button @click="clickMapObjectLoad">Загрузить данные</b-button>
+          </div>
+          <div class="mb-2">
             <b-button @click="clickHeatMap">Тепловая карта</b-button>
           </div>
           <b-list-group>
@@ -16,7 +19,6 @@
           </b-list-group>
         </b-col>
         <b-col cols="10">
-          <div>{{location}}</div>
           <div id="map" class="map"></div>
         </b-col>
       </b-row>
@@ -28,6 +30,7 @@
 import { MapCanvas, SingletonMap, MapSetting } from "../modules/map.js";
 
 export default {
+  props: ["locationObject"],
   data: () => ({
     ZoomMap: [
       { location: "Россия", xy: [90, 66], zoom: 3 },
@@ -40,15 +43,15 @@ export default {
       { location: "Казань", xy: [49.12, 55.78], zoom: 12 }
     ]
   }),
-  props: {
-    location: Array
-  },
   methods: {
     setZoom(xy, zoom) {
       new MapSetting().setLocation(xy, zoom);
     },
     clickHeatMap() {
       new MapSetting().heatMap();
+    },
+    clickMapObjectLoad: function() {
+      new MapSetting().setSource(this.locationObject);
     }
   },
   mounted() {
