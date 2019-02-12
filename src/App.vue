@@ -7,7 +7,7 @@
           <b-input
             id="keyWords"
             style="width: 300px"
-            placeholder="Введите ключевые слова (vue+html)"
+            placeholder="Введите ключевые слова (vue+html)" value="eepc" 
             size="sm"
             required
           ></b-input>
@@ -20,7 +20,7 @@
           <div>Количество вакансий - {{ result.length }} из {{ vacansCnt }}</div>
           <div>Количество объектов на карте - {{ addressArr.length }}</div>
           <br>
-          <div>{{ addressArr }}</div>
+          <!-- <div>{{ addressArr }}</div> -->
         </b-tab>
         <b-tab title="Навыки">
           <the-skills v-bind:arr="result"></the-skills>
@@ -140,7 +140,7 @@ export default {
                         console.log(e);
                       });
                   }.bind(this),
-                  i * 1000
+                  i * 2000
                 );
               });
             })
