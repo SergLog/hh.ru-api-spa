@@ -2,7 +2,6 @@ import "ol/ol.css";
 import { defaults as defaultControls } from "ol/control.js";
 import MousePosition from "ol/control/MousePosition.js";
 import { fromLonLat } from "ol/proj";
-
 import Feature from "ol/Feature.js";
 import Map from "ol/Map.js";
 import View from "ol/View.js";
@@ -70,7 +69,6 @@ export class MapSetting {
 
     var features = [];
     arrayCoordinates.forEach(p => {
-      //features.push(new Feature(new Point(fromLonLat([p.lat, p.lng]))));
       features.push(new Feature(new Point(fromLonLat([p.lng, p.lat]))));
     });
 
