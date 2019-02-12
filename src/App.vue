@@ -87,7 +87,7 @@ export default {
         .get(
           `https://api.hh.ru/vacancies/?text=${
             keywords.value
-          }+&per_page=100`
+          }+&per_page=100&area=1`
         )
         .then(response => {
           pagesCount = response.data.pages;
@@ -108,7 +108,7 @@ export default {
             .get(
               `https://api.hh.ru/vacancies/?text=${
                 keywords.value
-              }+&per_page=100&page=${i}`
+              }+&per_page=100&area=1&page=${i}`
             )
             .then(response => {
               response.data.items.forEach((element, i) => {

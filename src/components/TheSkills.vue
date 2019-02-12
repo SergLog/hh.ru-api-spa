@@ -4,10 +4,12 @@
    <b-btn @click="getskills">Вывести одинаковые</b-btn>
     <br>
     <br>
-    <div>Кол-во вакансий с заполненными навыками - {{ skillsNotNull.length }} из {{ arr.length }}</div>
+  <!-- <div>{{ salaryArr }}</div> -->
+    <div>Кол-во вакансий с заполненными ЗП - {{ salaryNotNull.length }} из {{ arr.length }}</div>
+    <div>{{ salaryArr }}</div>
+    <!-- <div>Кол-во вакансий с заполненными навыками - {{ skillsNotNull.length }} из {{ arr.length }}</div> -->
     <br>
-
-     <div v-for="(value, key, index) in sortable" :key="index">{{ value }} </div>
+     <!-- <div v-for="(value, key, index) in sortable" :key="index">{{ value }} </div> -->
      <br>
 
   </div>
@@ -20,9 +22,11 @@ export default {
       return {
         skills: String,
         skillsArr: [],
+        salaryArr: [],
         resArr: [],
         sortable: [],
         skillsNotNull: [],
+        salaryNotNull: [],
         skillsSortByTheSame: Object,
         res: Object
 
@@ -68,12 +72,6 @@ sortable.sort(function(a, b) {
     return a[1] - b[1];
 });
 
-      // this.skillsSortByTheSame.sort((a, b) => (a.value > b.value) ? 1 : -1)
-     //Object.v
-    //         function compareValues(a,b) {
-    // if (a[] > b.Prcnt) return 1
-    //   if (a.Prcnt < b.Prcnt) return -1
-    //   } 
       },
     run() {
 
@@ -86,7 +84,40 @@ sortable.sort(function(a, b) {
                  this.skillsArr.push(element.name);
             });    
         });   
-    }
+
+            this.arr.forEach((element, i) => {
+
+         
+
+          if (element.salary && element.salary.currency == 'RUR') {
+          this.salaryNotNull.push(element);
+
+              //console.log(element.salary.from);
+              //console.log(element.salary.to);
+
+              // if (element.salary.from = 4000) {
+              //   console.log(element);
+              //   }
+          
+          if (element.salary.from  == null) {
+               this.salaryArr.push(element.salary.to);
+          }
+
+          if (element.salary.to  == null) {
+               this.salaryArr.push(element.salary.from);
+          }
+           
+           if (element.salary.to != null & element.salary.from != null) {
+              this.salaryArr.push((element.salary.from + element.salary.to)/2);
+          }          
+
+          }  
+        });    
+    
+    
+    let average = (array) => array.reduce((a, b) => a + b) / array.length;
+console.log(average(this.salaryArr));
+}
   }
 };
 </script>
